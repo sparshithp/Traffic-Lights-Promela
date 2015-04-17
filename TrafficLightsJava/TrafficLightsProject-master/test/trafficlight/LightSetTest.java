@@ -224,6 +224,7 @@ public class LightSetTest extends ObservableTest {
 
     @Test
     public void switchToWalkAfterVehicleLightsAreRed() {
+        System.setOut(new PrintStream(consoleOut));
         try {
             log();
             lightSet = new LinearLightSet(0, observer);
@@ -231,14 +232,19 @@ public class LightSetTest extends ObservableTest {
                 lightSet.turnOn();
                 lightSet.advance();
             }
-            assertTrue(false);
+            assertThat(
+                    consoleOut.toString(),
+                    containsString("> trafficlight.LinearLightSet: 0 RED--switching pedestrian lights\r\n> trafficlight.PedestrianLight: 0 WALK"));
+            assertTrue(lightSet.getSignalCycle().isAlive());
         } catch (Exception e) {
             fail(e.getMessage());
         }
+        System.setOut(System.out);
     }
 
     @Test
     public void swichToDontWalkBeforeVehicleLightsAreGreen() {
+        System.setOut(new PrintStream(consoleOut));
         try {
             log();
             lightSet = new LinearLightSet(0, observer);
@@ -246,10 +252,14 @@ public class LightSetTest extends ObservableTest {
                 lightSet.turnOn();
                 lightSet.advance();
             }
-            assertTrue(false);
+            assertThat(
+                    consoleOut.toString(),
+                    containsString("> trafficlight.PedestrianLight: 0 DONT_WALK\r\n> trafficlight.LinearLightSet: 0 GREEN"));
+            assertTrue(lightSet.getSignalCycle().isAlive());
         } catch (Exception e) {
             fail(e.getMessage());
         }
+        System.setOut(System.out);
     }
 
     @Test
@@ -273,6 +283,7 @@ public class LightSetTest extends ObservableTest {
 
     @Test
     public void anyVehicleLightStaysGreenUntilTurningOrange() {
+        System.setOut(new PrintStream(consoleOut));
         try {
             log();
             lightSet = new LinearLightSet(0, observer);
@@ -280,14 +291,18 @@ public class LightSetTest extends ObservableTest {
                 lightSet.turnOn();
                 lightSet.advance();
             }
-            assertTrue(false);
+            assertThat(consoleOut.toString(),
+                    containsString("trafficlight.LinearLightSet: 0 GREEN--switching to ORANGE"));
+            assertTrue(lightSet.getSignalCycle().isAlive());
         } catch (Exception e) {
             fail(e.getMessage());
         }
+        System.setOut(System.out);
     }
 
     @Test
     public void anyVehicleLightStaysRedUntilTurningGreen() {
+        System.setOut(new PrintStream(consoleOut));
         try {
             log();
             lightSet = new LinearLightSet(0, observer);
@@ -295,9 +310,11 @@ public class LightSetTest extends ObservableTest {
                 lightSet.turnOn();
                 lightSet.advance();
             }
-            assertTrue(false);
+            assertThat(consoleOut.toString(), containsString("trafficlight.LinearLightSet: 0 RED--switching to GREEN"));
+            assertTrue(lightSet.getSignalCycle().isAlive());
         } catch (Exception e) {
             fail(e.getMessage());
         }
+        System.setOut(System.out);
     }
 }
