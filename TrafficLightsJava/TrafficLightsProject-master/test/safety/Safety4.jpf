@@ -1,0 +1,4 @@
+classpath=/Users/bluebyte60/Dropbox/SVVT/project2/Traffic-Lights-Promela/TrafficLightsJava/bin
+target=safety.Safety4
+#report.console.property_violation=error,snapshot,trace
+#search.depth_limit=25
