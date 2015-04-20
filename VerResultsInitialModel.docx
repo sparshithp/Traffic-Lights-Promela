@@ -1,0 +1,182 @@
+First Refined Model
+
+•	Extending mtype data type to include Orange light
+Safety properties verification:
+
+Starting syntax check and model checker source generation...
+spin -a -v Project2.pml
+ltl eventuallyOrange: ((([] (<> ((L0_status==ORANGE)))) && ([] (<> ((L1_status==ORANGE))))) && ([] (<> ((T0_status==ORANGE))))) && ([] (<> ((T1_status==ORANGE))))
+No Syntax Error.
+
+Starting verification...
+/usr/bin/gcc -DMEMLIM=1024 -DSAFETY -DXUSAFE -O2 -w -o pan pan.c
+./pan -m10000 -c1
+Verification result:
+
+warning: never claim + accept labels requires -a flag to fully verify
+
+(Spin Version 6.4.3 -- 16 December 2014)
+	+ Partial Order Reduction
+
+Full statespace search for:
+	never claim         	+ (eventuallyOrange)
+	assertion violations	+ (if within scope of claim)
+	cycle checks       	- (disabled by -DSAFETY)
+	invalid end states	- (disabled by never claim)
+
+State-vector 92 byte, depth reached 114, errors: 0
+      177 states, stored
+      239 states, matched
+      416 transitions (= stored+matched)
+       31 atomic steps
+hash conflicts:         0 (resolved)
+
+Stats on memory usage (in Megabytes):
+    0.020	equivalent memory usage for states (stored*(State-vector + overhead))
+    0.282	actual memory usage for states
+  128.000	memory used for hash table (-w24)
+    0.534	memory used for DFS stack (-m10000)
+  128.730	total actual memory usage
+
+
+unreached in proctype L0
+	Project2.pml:47, state 20, "-end-"
+	(1 of 20 states)
+unreached in proctype L1
+	Project2.pml:57, state 20, "-end-"
+	(1 of 20 states)
+unreached in proctype T0
+	Project2.pml:66, state 13, "-end-"
+	(1 of 13 states)
+unreached in proctype T1
+	Project2.pml:75, state 13, "-end-"
+	(1 of 13 states)
+unreached in init
+	(0 of 6 states)
+unreached in claim eventuallyOrange
+	_spin_nvr.tmp:25, state 34, "-end-"
+	(1 of 34 states)
+
+pan: elapsed time 0 seconds
+____________________________________________________________________________
+
+Liveliness properties verification:
+•	For any vehicle light, always, the signal eventually turns orange.
+
+Starting syntax check and model checker source generation...
+spin -a -v Project2.pml
+ltl eventuallyOrange: ((([] (<> ((L0_status==ORANGE)))) && ([] (<> ((L1_status==ORANGE))))) && ([] (<> ((T0_status==ORANGE))))) && ([] (<> ((T1_status==ORANGE))))
+No Syntax Error.
+
+Starting verification...
+/usr/bin/gcc -DMEMLIM=1024 -DNOFAIR -DXUSAFE -O2 -w -o pan pan.c
+./pan -m10000 -a -c1
+Verification result:
+
+
+(Spin Version 6.4.3 -- 16 December 2014)
+	+ Partial Order Reduction
+
+Full statespace search for:
+	never claim         	+ (eventuallyOrange)
+	assertion violations	+ (if within scope of claim)
+	acceptance   cycles 	+ (fairness disabled)
+	invalid end states	- (disabled by never claim)
+
+State-vector 92 byte, depth reached 159, errors: 0
+      280 states, stored (439 visited)
+      758 states, matched
+     1197 transitions (= visited+matched)
+       52 atomic steps
+hash conflicts:         0 (resolved)
+
+Stats on memory usage (in Megabytes):
+    0.032	equivalent memory usage for states (stored*(State-vector + overhead))
+    0.282	actual memory usage for states
+  128.000	memory used for hash table (-w24)
+    0.534	memory used for DFS stack (-m10000)
+  128.730	total actual memory usage
+
+
+unreached in proctype L0
+	Project2.pml:47, state 20, "-end-"
+	(1 of 20 states)
+unreached in proctype L1
+	Project2.pml:57, state 20, "-end-"
+	(1 of 20 states)
+unreached in proctype T0
+	Project2.pml:66, state 13, "-end-"
+	(1 of 13 states)
+unreached in proctype T1
+	Project2.pml:75, state 13, "-end-"
+	(1 of 13 states)
+unreached in init
+	(0 of 6 states)
+unreached in claim eventuallyOrange
+	_spin_nvr.tmp:25, state 34, "-end-"
+	(1 of 34 states)
+
+pan: elapsed time 0 seconds
+____________________________________________________________________________
+
+•	For any vehicle light (stoplight or turn light), always: if a GREEN signal is on, it stays on until the signal turns ORANGE.
+
+Starting syntax check and model checker source generation...
+spin -a -v Project2.pml
+ltl greenUntilOrange: ((([] ((! ((L0_status==GREEN))) || (((L0_status==GREEN)) U ((L0_status==ORANGE))))) && ([] ((! ((L1_status==GREEN))) || (((L1_status==GREEN)) U ((L1_status==ORANGE)))))) && ([] ((! ((T0_status==GREEN))) || (((T0_status==GREEN)) U ((T0_status==ORANGE)))))) && ([] ((! ((T1_status==GREEN))) || (((T1_status==GREEN)) U ((T1_status==ORANGE)))))
+No Syntax Error.
+
+Starting verification...
+/usr/bin/gcc -DMEMLIM=1024 -DNOFAIR -DXUSAFE -O2 -w -o pan pan.c
+./pan -m10000 -a -c1
+Verification result:
+
+
+(Spin Version 6.4.3 -- 16 December 2014)
+	+ Partial Order Reduction
+
+Full statespace search for:
+	never claim         	+ (greenUntilOrange)
+	assertion violations	+ (if within scope of claim)
+	acceptance   cycles 	+ (fairness disabled)
+	invalid end states	- (disabled by never claim)
+
+State-vector 92 byte, depth reached 159, errors: 0
+      133 states, stored (145 visited)
+      191 states, matched
+      336 transitions (= visited+matched)
+       16 atomic steps
+hash conflicts:         0 (resolved)
+
+Stats on memory usage (in Megabytes):
+    0.015	equivalent memory usage for states (stored*(State-vector + overhead))
+    0.278	actual memory usage for states
+  128.000	memory used for hash table (-w24)
+    0.534	memory used for DFS stack (-m10000)
+  128.730	total actual memory usage
+
+
+unreached in proctype L0
+	Project2.pml:52, state 20, "-end-"
+	(1 of 20 states)
+unreached in proctype L1
+	Project2.pml:62, state 20, "-end-"
+	(1 of 20 states)
+unreached in proctype T0
+	Project2.pml:71, state 13, "-end-"
+	(1 of 13 states)
+unreached in proctype T1
+	Project2.pml:80, state 13, "-end-"
+	(1 of 13 states)
+unreached in init
+	(0 of 6 states)
+unreached in claim greenUntilOrange
+	_spin_nvr.tmp:32, state 50, "-end-"
+	(1 of 50 states)
+
+pan: elapsed time 0 seconds
+____________________________________________________________________________
+
+
+
+
