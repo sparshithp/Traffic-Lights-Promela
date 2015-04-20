@@ -1,0 +1,333 @@
+First Refined Model
+•	Extending mtype data type to include Orange light
+Safety properties verification result:
+
+Starting syntax check and model checker source generation...
+spin -a -v Project2.pml
+ltl eventuallyOrange: ((([] (<> ((L0_status==ORANGE)))) && ([] (<> ((L1_status==ORANGE))))) && ([] (<> ((T0_status==ORANGE))))) && ([] (<> ((T1_status==ORANGE))))
+No Syntax Error.
+
+Starting verification...
+/usr/bin/gcc -DMEMLIM=1024 -DSAFETY -DXUSAFE -O2 -w -o pan pan.c
+./pan -m10000 -c1
+Verification result:
+
+warning: never claim + accept labels requires -a flag to fully verify
+
+(Spin Version 6.4.3 -- 16 December 2014)
+	+ Partial Order Reduction
+
+Full statespace search for:
+	never claim         	+ (eventuallyOrange)
+	assertion violations	+ (if within scope of claim)
+	cycle checks       	- (disabled by -DSAFETY)
+	invalid end states	- (disabled by never claim)
+
+State-vector 92 byte, depth reached 114, errors: 0
+      177 states, stored
+      239 states, matched
+      416 transitions (= stored+matched)
+       31 atomic steps
+hash conflicts:         0 (resolved)
+
+Stats on memory usage (in Megabytes):
+    0.020	equivalent memory usage for states (stored*(State-vector + overhead))
+    0.282	actual memory usage for states
+  128.000	memory used for hash table (-w24)
+    0.534	memory used for DFS stack (-m10000)
+  128.730	total actual memory usage
+
+
+unreached in proctype L0
+	Project2.pml:47, state 20, "-end-"
+	(1 of 20 states)
+unreached in proctype L1
+	Project2.pml:57, state 20, "-end-"
+	(1 of 20 states)
+unreached in proctype T0
+	Project2.pml:66, state 13, "-end-"
+	(1 of 13 states)
+unreached in proctype T1
+	Project2.pml:75, state 13, "-end-"
+	(1 of 13 states)
+unreached in init
+	(0 of 6 states)
+unreached in claim eventuallyOrange
+	_spin_nvr.tmp:25, state 34, "-end-"
+	(1 of 34 states)
+
+pan: elapsed time 0 seconds
+________________________________________________________________________
+
+Liveliness properties verification results:
+•	Always, eventually: incoming pedestrians from any direction can cross the intersection in that direction.
+
+Starting syntax check and model checker source generation...
+spin -a -v FirstAbstraction.pml
+ltl pedCrossAnyDirEventually: [] ((<> ((L0_walk==WALK))) && (<> ((L1_walk==WALK))))
+No Syntax Error.
+
+Starting verification...
+/usr/bin/gcc -DMEMLIM=1024 -DNOFAIR -DXUSAFE -O2 -w -o pan pan.c
+./pan -m10000 -a -n -c1
+Verification result:
+
+
+(Spin Version 6.4.3 -- 16 December 2014)
+	+ Partial Order Reduction
+
+Full statespace search for:
+	never claim         	+ (pedCrossAnyDirEventually)
+	assertion violations	+ (if within scope of claim)
+	acceptance   cycles 	+ (fairness disabled)
+	invalid end states	- (disabled by never claim)
+
+State-vector 92 byte, depth reached 159, errors: 0
+      197 states, stored (273 visited)
+      439 states, matched
+      712 transitions (= visited+matched)
+       34 atomic steps
+hash conflicts:         0 (resolved)
+
+Stats on memory usage (in Megabytes):
+    0.023	equivalent memory usage for states (stored*(State-vector + overhead))
+    0.283	actual memory usage for states
+  128.000	memory used for hash table (-w24)
+    0.534	memory used for DFS stack (-m10000)
+  128.730	total actual memory usage
+
+pan: elapsed time 0 seconds
+________________________________________________________________________
+
+•	Always, eventually: incoming vehicles from any direction can cross the intersection in that direction.
+
+Starting syntax check and model checker source generation...
+spin -a -v FirstAbstraction.pml
+ltl vehCrossAnyDirEventually: [] ((((<> ((L1_status==GREEN))) && (<> ((L0_status==GREEN)))) && (<> ((T1_status==GREEN)))) && (<> ((T0_status==GREEN))))
+No Syntax Error.
+
+Starting verification...
+/usr/bin/gcc -DMEMLIM=1024 -DNOFAIR -DXUSAFE -O2 -w -o pan pan.c
+./pan -m10000 -a -n -c1
+Verification result:
+
+
+(Spin Version 6.4.3 -- 16 December 2014)
+	+ Partial Order Reduction
+
+Full statespace search for:
+	never claim         	+ (vehCrossAnyDirEventually)
+	assertion violations	+ (if within scope of claim)
+	acceptance   cycles 	+ (fairness disabled)
+	invalid end states	- (disabled by never claim)
+
+State-vector 92 byte, depth reached 159, errors: 0
+      281 states, stored (441 visited)
+      759 states, matched
+     1200 transitions (= visited+matched)
+       64 atomic steps
+hash conflicts:         0 (resolved)
+
+Stats on memory usage (in Megabytes):
+    0.032	equivalent memory usage for states (stored*(State-vector + overhead))
+    0.282	actual memory usage for states
+  128.000	memory used for hash table (-w24)
+    0.534	memory used for DFS stack (-m10000)
+  128.730	total actual memory usage
+
+pan: elapsed time 0 seconds
+________________________________________________________________________
+
+•	Always, eventually: incoming vehicles from any direction can make a protected left turn.
+
+Starting syntax check and model checker source generation...
+spin -a -v FirstAbstraction.pml
+ltl vehCanMakeProtLeftTurn: [] ((<> (((((T0_status==GREEN)) && ((L1_status==RED))) && ((L0_status==RED))) && ((T1_status==RED)))) && (<> (((((T1_status==GREEN)) && ((L1_status==RED))) && ((L0_status==RED))) && ((T0_status==RED)))))
+No Syntax Error.
+
+Starting verification...
+/usr/bin/gcc -DMEMLIM=1024 -DNOFAIR -DXUSAFE -O2 -w -o pan pan.c
+./pan -m10000 -a -n -c1
+Verification result:
+
+
+(Spin Version 6.4.3 -- 16 December 2014)
+	+ Partial Order Reduction
+
+Full statespace search for:
+	never claim         	+ (vehCanMakeProtLeftTurn)
+	assertion violations	+ (if within scope of claim)
+	acceptance   cycles 	+ (fairness disabled)
+	invalid end states	- (disabled by never claim)
+
+State-vector 92 byte, depth reached 159, errors: 0
+      201 states, stored (281 visited)
+      459 states, matched
+      740 transitions (= visited+matched)
+       40 atomic steps
+hash conflicts:         0 (resolved)
+
+Stats on memory usage (in Megabytes):
+    0.023	equivalent memory usage for states (stored*(State-vector + overhead))
+    0.283	actual memory usage for states
+  128.000	memory used for hash table (-w24)
+    0.534	memory used for DFS stack (-m10000)
+  128.730	total actual memory usage
+
+pan: elapsed time 0 seconds
+________________________________________________________________________
+
+•	For any vehicle light, always, the signal eventually turns orange.
+
+Starting syntax check and model checker source generation...
+spin -a -v Project2.pml
+ltl eventuallyOrange: ((([] (<> ((L0_status==ORANGE)))) && ([] (<> ((L1_status==ORANGE))))) && ([] (<> ((T0_status==ORANGE))))) && ([] (<> ((T1_status==ORANGE))))
+No Syntax Error.
+
+Starting verification...
+/usr/bin/gcc -DMEMLIM=1024 -DNOFAIR -DXUSAFE -O2 -w -o pan pan.c
+./pan -m10000 -a -c1
+Verification result:
+
+
+(Spin Version 6.4.3 -- 16 December 2014)
+	+ Partial Order Reduction
+
+Full statespace search for:
+	never claim         	+ (eventuallyOrange)
+	assertion violations	+ (if within scope of claim)
+	acceptance   cycles 	+ (fairness disabled)
+	invalid end states	- (disabled by never claim)
+
+State-vector 92 byte, depth reached 159, errors: 0
+      280 states, stored (439 visited)
+      758 states, matched
+     1197 transitions (= visited+matched)
+       52 atomic steps
+hash conflicts:         0 (resolved)
+
+Stats on memory usage (in Megabytes):
+    0.032	equivalent memory usage for states (stored*(State-vector + overhead))
+    0.282	actual memory usage for states
+  128.000	memory used for hash table (-w24)
+    0.534	memory used for DFS stack (-m10000)
+  128.730	total actual memory usage
+
+
+unreached in proctype L0
+	Project2.pml:47, state 20, "-end-"
+	(1 of 20 states)
+unreached in proctype L1
+	Project2.pml:57, state 20, "-end-"
+	(1 of 20 states)
+unreached in proctype T0
+	Project2.pml:66, state 13, "-end-"
+	(1 of 13 states)
+unreached in proctype T1
+	Project2.pml:75, state 13, "-end-"
+	(1 of 13 states)
+unreached in init
+	(0 of 6 states)
+unreached in claim eventuallyOrange
+	_spin_nvr.tmp:25, state 34, "-end-"
+	(1 of 34 states)
+
+pan: elapsed time 0 seconds
+____________________________________________________________________________
+
+•	For any vehicle light (stoplight or turn light), always: if a GREEN signal is on, it stays on until the signal turns ORANGE.
+
+Starting syntax check and model checker source generation...
+spin -a -v Project2.pml
+ltl greenUntilOrange: ((([] ((! ((L0_status==GREEN))) || (((L0_status==GREEN)) U ((L0_status==ORANGE))))) && ([] ((! ((L1_status==GREEN))) || (((L1_status==GREEN)) U ((L1_status==ORANGE)))))) && ([] ((! ((T0_status==GREEN))) || (((T0_status==GREEN)) U ((T0_status==ORANGE)))))) && ([] ((! ((T1_status==GREEN))) || (((T1_status==GREEN)) U ((T1_status==ORANGE)))))
+No Syntax Error.
+
+Starting verification...
+/usr/bin/gcc -DMEMLIM=1024 -DNOFAIR -DXUSAFE -O2 -w -o pan pan.c
+./pan -m10000 -a -c1
+Verification result:
+
+
+(Spin Version 6.4.3 -- 16 December 2014)
+	+ Partial Order Reduction
+
+Full statespace search for:
+	never claim         	+ (greenUntilOrange)
+	assertion violations	+ (if within scope of claim)
+	acceptance   cycles 	+ (fairness disabled)
+	invalid end states	- (disabled by never claim)
+
+State-vector 92 byte, depth reached 159, errors: 0
+      133 states, stored (145 visited)
+      191 states, matched
+      336 transitions (= visited+matched)
+       16 atomic steps
+hash conflicts:         0 (resolved)
+
+Stats on memory usage (in Megabytes):
+    0.015	equivalent memory usage for states (stored*(State-vector + overhead))
+    0.278	actual memory usage for states
+  128.000	memory used for hash table (-w24)
+    0.534	memory used for DFS stack (-m10000)
+  128.730	total actual memory usage
+
+
+unreached in proctype L0
+	Project2.pml:52, state 20, "-end-"
+	(1 of 20 states)
+unreached in proctype L1
+	Project2.pml:62, state 20, "-end-"
+	(1 of 20 states)
+unreached in proctype T0
+	Project2.pml:71, state 13, "-end-"
+	(1 of 13 states)
+unreached in proctype T1
+	Project2.pml:80, state 13, "-end-"
+	(1 of 13 states)
+unreached in init
+	(0 of 6 states)
+unreached in claim greenUntilOrange
+	_spin_nvr.tmp:32, state 50, "-end-"
+	(1 of 50 states)
+
+pan: elapsed time 0 seconds
+____________________________________________________________________________
+
+•	For any vehicle light (stoplight or turn light), always: if a RED signal is on, it stays on until the signal turns GREEN.
+
+Starting syntax check and model checker source generation...
+spin -a -v FirstAbstraction.pml
+ltl redUntilGreen: [] ((! ((! ((! ((! ((L1_status==RED))) || ((X (<> ((L1_status==GREEN)))) || ((L0_status==RED))))) || ((X (<> ((L0_status==GREEN)))) || ((T1_status==RED))))) || ((X (<> ((T1_status==GREEN)))) || ((T0_status==RED))))) || (X (<> ((T0_status==GREEN)))))
+No Syntax Error.
+
+Starting verification...
+/usr/bin/gcc -DMEMLIM=1024 -DNOFAIR -DXUSAFE -O2 -w -o pan pan.c
+./pan -m10000 -a -n -c1
+Verification result:
+
+
+(Spin Version 6.4.3 -- 16 December 2014)
+	+ Partial Order Reduction
+
+Full statespace search for:
+	never claim         	+ (redUntilGreen)
+	assertion violations	+ (if within scope of claim)
+	acceptance   cycles 	+ (fairness disabled)
+	invalid end states	- (disabled by never claim)
+
+State-vector 92 byte, depth reached 159, errors: 0
+      263 states, stored (403 visited)
+      514 states, matched
+      917 transitions (= visited+matched)
+       57 atomic steps
+hash conflicts:         0 (resolved)
+
+Stats on memory usage (in Megabytes):
+    0.030	equivalent memory usage for states (stored*(State-vector + overhead))
+    0.280	actual memory usage for states
+  128.000	memory used for hash table (-w24)
+    0.534	memory used for DFS stack (-m10000)
+  128.730	total actual memory usage
+
+pan: elapsed time 0 seconds
+________________________________________________________________________
