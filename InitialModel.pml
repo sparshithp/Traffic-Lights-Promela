@@ -1,10 +1,13 @@
+/* Different States of the system */
 mtype ={GREEN, RED, WALK, DONT_WALK};
 
+/* Channel for each light set */
 chan to_L0 = [1] of {bit};
 chan to_L1 = [1] of {bit};
 chan to_T0 = [1] of {bit};
 chan to_T1 = [1] of {bit};
 
+/* Initial state of every light set */
 mtype L0_status = RED;
 mtype L1_status = RED;
 
@@ -14,21 +17,27 @@ mtype L1_walk = DONT_WALK;
 mtype T0_status = RED;
 mtype T1_status = RED;
 
+/**************************** Liveliness Properties Verification *****************************/
+/*
+ltl pedCrossAnyDirEventually { [](<>(L0_walk == WALK) && <>(L1_walk == WALK)) }
+ltl vehCrossAnyDirEventually { [](<>(L1_status == GREEN) && <>(L0_status == GREEN) && 
+								  <>(T1_status == GREEN) && <>(T0_status == GREEN))
+								}
+ltl vehCanMakeProtLeftTurn { [](<>(T0_status == GREEN && L1_status == RED && L0_status == RED && T1_status == RED) &&
+								<>(T1_status == GREEN && L1_status == RED && L0_status == RED && T0_status == RED))
+							}
+ltl redUntilGreen { [](	(L1_status == RED) -> X<>(L1_status == GREEN) || 
+						(L0_status == RED) -> X<>(L0_status == GREEN) ||
+						(T1_status == RED) -> X<>(T1_status == GREEN) || 
+						(T0_status == RED) -> X<>(T0_status == GREEN))
+						}
+*/ 
 
-//ltl pedCrossAnyDirEventually { [](<>(L0_walk == WALK) && <>(L1_walk == WALK)) }
-//ltl vehCrossAnyDirEventually { [](<>(L1_status == GREEN) && <>(L0_status == GREEN) && 
-//								  <>(T1_status == GREEN) && <>(T0_status == GREEN))
-//								}
-//ltl vehCanMakeProtLeftTurn { [](<>(T0_status == GREEN && L1_status == RED && L0_status == RED && T1_status == RED) &&
-//								<>(T1_status == GREEN && L1_status == RED && L0_status == RED && T0_status == RED))
-//							}
-//ltl redUntilGreen { [](	(L1_status == RED) -> X<>(L1_status == GREEN) || 
-//						(L0_status == RED) -> X<>(L0_status == GREEN) ||
-//						(T1_status == RED) -> X<>(T1_status == GREEN) || 
-//						(T0_status == RED) -> X<>(T0_status == GREEN))
-//						} 
+/*************************** End of Liveliness property verification **************************/
 
+/*************************** Process Modeling **********************************************/
 
+/* Asserts below verify the safety properties */ 
 proctype L0(){	
 	do
 		::to_L0?1 -> atomic{L0_status = GREEN; L1_walk = WALK; assert L1_status == RED; 
@@ -71,3 +80,5 @@ init{
 	run T0();
 	run T1();
 }
+
+/****************************************** End of Model ***********************************/
