@@ -292,7 +292,7 @@ public abstract class AbstractLightSet extends ObservableEntity implements Runna
 	
 	/* 
 	 * This method will override the protocol of switchSet(Signal) and force the main
-	 * lights controlled by this light set to be reset to its stop signal RED. 
+	 * lights controlled by this light set to be reset to their stop signal RED. 
 	 * This will be necessary to allow protected left turns. 
 	 */
 	protected synchronized void switchAllLightsToStopSignal() throws InterruptedException {
