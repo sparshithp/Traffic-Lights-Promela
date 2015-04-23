@@ -1,5 +1,10 @@
 #include "GlobalFunction.pml"
 
+/*
+This model reveals the falut in second safety property, this model is just small enough to capture the falut 
+*/
+
+
 /*Continuely switch the light of L[0]*/
 proctype L0(){
 	again:
