@@ -7,6 +7,7 @@ This model reveals the falut in second safety property, this model is just small
 
 /*Continuely switch the light of L[0]*/
 proctype L0(){
+	int i;/*Paramaters that will used to in global function*/
 	again:
 	 switchVehicleLightToRED(0);
 	 switchVehicleLightToGREEN(0);
@@ -15,6 +16,7 @@ proctype L0(){
 }
 /*Continuely switch the light of L[1]*/
 proctype L1(){
+	int i;/*Parameters that will be used in global function*/
 	again:
 	 switchVehicleLightToRED(1);
 	 switchVehicleLightToGREEN(1);

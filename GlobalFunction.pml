@@ -1,5 +1,6 @@
 /*Global variables*/
-mtype = {OFF, RED,  GREEN, ORANGE, WALK, DONT_WALK};
+mtype = {OFF, RED,  GREEN, ORANGE, WALK, DONT_WALK};/*Traffic Light Status*/
+mtype = {INIT, ADVANCE, PRE_STOP, STOP, ALL_STOP};/*Event Status*/
 chan to_L0 = [255] of {mtype};/*channel to vehicle light set 0*/
 chan to_L1 = [255] of {mtype};/*channel to vehicle light set 1*/
 chan to_T0 = [255] of {mtype}/*channel to  turnlight set 0*/
@@ -9,7 +10,14 @@ mtype T[2] = OFF; /*lights of Turn light T[0] T[1]*/
 mtype VehicleLights[4] = OFF;/*sub lights of vehicle lights*/
 mtype TurnLights[4] = OFF;/*sub lights of turn lights*/
 mtype PedestrianLights[4] = OFF;
-int i;
+
+/*A function that set all the lights to stop*/
+inline resetLightSets(){
+	switchVehicleLightToOFF(0);
+	switchTurnLightToOFF(0);
+	switchVehicleLightToOFF(1);
+	switchTurnLightToOFF(1);
+}
 
 /*Switch L[index] to OFF */
 inline switchVehicleLightToOFF(index){
@@ -19,6 +27,7 @@ inline switchVehicleLightToOFF(index){
 		for (i :  (index+1)*2-2 .. (index+1)*2-1) {
 			 VehicleLights[i] = OFF;
 		}
+		switchPedestrianLightsToOFF(index);
 	}
 }
 
@@ -33,11 +42,21 @@ inline switchPedestrianLightsToWALK( index){
 }
 
 /*Switch Pedestrian[index] to DONT_WALK */
-inline switchPedestrianLightsToDONT_WALK( index){
+inline switchPedestrianLightsToDONT_WALK(index){
 	atomic{
 		i=(index+1)*2-2;
 		for (i :  (index+1)*2-2 .. (index+1)*2-1) {
 			 PedestrianLights[i] = DONT_WALK;
+		}
+	}
+}
+
+/*Switch Pedestrian[index] to OFF */
+inline switchPedestrianLightsToOFF(index){
+	atomic{
+		i=(index+1)*2-2;
+		for (i :  (index+1)*2-2 .. (index+1)*2-1) {
+			 PedestrianLights[i] = OFF;
 		}
 	}
 }
@@ -112,7 +131,7 @@ inline switchTurnLightToGREEN(index){
 }
 
 /*Switch T[index] to ORANGE */
-inline switchTToORANGE(index){
+inline switchTurnLightToORANGE(index){
 	T[index] = ORANGE;
 	atomic{
 		i=(index+1)*2-2;
