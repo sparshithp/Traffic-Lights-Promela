@@ -1,10 +1,14 @@
 /*Global variables*/
 mtype = {OFF, RED,  GREEN, ORANGE, WALK, DONT_WALK};/*Traffic Light Status*/
-mtype = {INIT, ADVANCE, PRE_STOP, STOP, ALL_STOP};/*Event Status*/
-chan to_L0 = [255] of {mtype};/*channel to vehicle light set 0*/
-chan to_L1 = [255] of {mtype};/*channel to vehicle light set 1*/
-chan to_T0 = [255] of {mtype}/*channel to  turnlight set 0*/
-chan to_T1 = [255] of {mtype}/*channel to turn light set 1*/
+mtype = {INIT, ENABLE, ADVANCE, PRE_STOP, STOP, ALL_STOP};/*Event Status*/
+mtype = { UnblockPed, L0PedBlock, L1PedBlock, LInitDone, TInitDone, L0_Done, L1_Done, T0_Done, T1_Done, BlockPed } /* Notification Events */
+
+chan to_L0 = [1] of {mtype};/*channel to vehicle light set 0*/
+chan to_L1 = [1] of {mtype};/*channel to vehicle light set 1*/
+chan to_T0 = [1] of {mtype};/*channel to  turnlight set 0*/
+chan to_T1 = [1] of {mtype};/*channel to turn light set 1*/
+chan to_Inter = [1] of {mtype}; /* channel for intersection */
+
 mtype L[2] =  OFF;/*lights of vehicle light L[0] L[1]*/
 mtype T[2] = OFF; /*lights of Turn light T[0] T[1]*/
 mtype VehicleLights[4] = OFF;/*sub lights of vehicle lights*/
@@ -23,7 +27,7 @@ inline resetLightSets(){
 inline switchVehicleLightToOFF(index){
 	L[index] = OFF;	
 	atomic{ 
-		i=(index+1)*2-2;
+		int i=(index+1)*2-2;
 		for (i :  (index+1)*2-2 .. (index+1)*2-1) {
 			 VehicleLights[i] = OFF;
 		}
@@ -34,7 +38,7 @@ inline switchVehicleLightToOFF(index){
 /*Switch Pedestrian[index] to Walk */
 inline switchPedestrianLightsToWALK( index){	
 	atomic{
-		i=(index+1)*2-2;
+		int i=(index+1)*2-2;
 		for (i :  (index+1)*2-2 .. (index+1)*2-1) {
 		 	 PedestrianLights[i] = WALK;
 		}
@@ -44,7 +48,7 @@ inline switchPedestrianLightsToWALK( index){
 /*Switch Pedestrian[index] to DONT_WALK */
 inline switchPedestrianLightsToDONT_WALK(index){
 	atomic{
-		i=(index+1)*2-2;
+		int i=(index+1)*2-2;
 		for (i :  (index+1)*2-2 .. (index+1)*2-1) {
 			 PedestrianLights[i] = DONT_WALK;
 		}
@@ -54,7 +58,7 @@ inline switchPedestrianLightsToDONT_WALK(index){
 /*Switch Pedestrian[index] to OFF */
 inline switchPedestrianLightsToOFF(index){
 	atomic{
-		i=(index+1)*2-2;
+		int i=(index+1)*2-2;
 		for (i :  (index+1)*2-2 .. (index+1)*2-1) {
 			 PedestrianLights[i] = OFF;
 		}
@@ -67,7 +71,7 @@ inline switchVehicleLightToRED( index){
 	switchPedestrianLightsToWALK(index);/*This part loyal to implementation*/
 	L[index] = RED;	
 	atomic{
-		i=(index+1)*2-2;
+		int i=(index+1)*2-2;
 		for (i :  (index+1)*2-2 .. (index+1)*2-1) {
 			 VehicleLights[i] = RED;
 		}
@@ -78,7 +82,7 @@ inline switchVehicleLightToRED( index){
 inline switchVehicleLightToGREEN( index){
 	L[index] = GREEN;	
 	atomic{
-		i=(index+1)*2-2;
+		int i=(index+1)*2-2;
 		for (i :  (index+1)*2-2 .. (index+1)*2-1) {
 			 VehicleLights[i] = GREEN;
 		}
@@ -90,7 +94,7 @@ inline switchVehicleLightToGREEN( index){
 inline switchVehicleLightToORANGE( index){
 	L[index] = ORANGE;
 	atomic{
-		i=(index+1)*2-2;
+		int i=(index+1)*2-2;
 		for (i :  (index+1)*2-2 .. (index+1)*2-1) {
 			 VehicleLights[i] = ORANGE;
 		}
@@ -101,7 +105,7 @@ inline switchVehicleLightToORANGE( index){
 inline switchTurnLightToOFF( index){
 	T[index] = OFF;
 	atomic{
-		i=(index+1)*2-2;	
+		int i=(index+1)*2-2;	
 		for (i :  (index+1)*2-2 .. (index+1)*2-1) {
 			 TurnLights[i] = OFF;
 		}
@@ -112,7 +116,7 @@ inline switchTurnLightToOFF( index){
 inline switchTurnLightToRED( index){
 	T[index] = RED;	
 	atomic{
-		i=(index+1)*2-2;
+		int i=(index+1)*2-2;
 		for (i :  (index+1)*2-2 .. (index+1)*2-1) {
 			 TurnLights[i] = RED;
 		}
@@ -123,7 +127,7 @@ inline switchTurnLightToRED( index){
 inline switchTurnLightToGREEN(index){
 	T[index] = GREEN;
 	atomic{
-		i=(index+1)*2-2;
+		int i=(index+1)*2-2;
 		for (i :  (index+1)*2-2 .. (index+1)*2-1) {
 			 TurnLights[i] = GREEN;
 		}
@@ -134,7 +138,7 @@ inline switchTurnLightToGREEN(index){
 inline switchTurnLightToORANGE(index){
 	T[index] = ORANGE;
 	atomic{
-		i=(index+1)*2-2;
+		int i=(index+1)*2-2;
 		for (i :  (index+1)*2-2 .. (index+1)*2-1) {
 			 TurnLights[i] = ORANGE;
 		}
@@ -143,7 +147,7 @@ inline switchTurnLightToORANGE(index){
 
 
 inline printVehicleLight(index){
-	i=0;
+	int i=0;
 	for (i :  (index+1)*2-2 .. (index+1)*2-1) {
 		printf("VehicleLights[i] = %d\n", VehicleLights[i]);		
 	}
@@ -157,3 +161,5 @@ inline printVehicleLight(index){
 	run switchVehicleLightToRED(1);
 	run printVehicleLight(1);
 }*/
+
+
