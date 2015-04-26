@@ -67,11 +67,25 @@ proctype T1(){
 	od
 }
 
+proctype Monitor(){
+	/* The assertion to verify safety property 4*/
+	do	
+	/*when a north-south pedestrian light is  WALK, all the turn light must be RED (include sub light)*/
+	::atomic{(PedestrianLights[0] == WALK|| PedestrianLights[1] == WALK) -> assert(T[0] == RED && T[1] == RED && TurnLights[0] == RED && TurnLights[1] == RED && TurnLights[2] == RED && TurnLights[3] == RED)};
+	/*when a east-west pedestrian light is  WALK, all the turn light must be RED (include sub light)*/
+	::atomic{(PedestrianLights[2] == WALK|| PedestrianLights[3] == WALK) -> assert(T[0] == RED && T[1] == RED && TurnLights[0] == RED && TurnLights[1] == RED && TurnLights[2] == RED && TurnLights[3] == RED)};
+	od
+	
+
+}
+
 init{
+	run Monitor();
 	run Intersection();
 	run L0();
 	run L1();
 	run T0();
-	run T1();
+	run T1();	
 	to_Inter!ENABLE;
+
 }

@@ -5,10 +5,11 @@ This model reveals the falut in second safety property, this model is just small
 */
 /*Function to check the status of light*/
 inline checkLightStatus(){
-	for (i :  0 .. 3) {
-		assert(VehicleLights[i] == OFF);
-		assert(TurnLights[i] == OFF);
-		assert(PedestrianLights[i] == OFF);
+	int j=0;
+	for (j :  0 .. 3) {
+		assert(VehicleLights[j] == OFF);
+		assert(TurnLights[j] == OFF);
+		assert(PedestrianLights[j] == OFF);
 	}
 }
 /*Function to disable the 4 light set*/
@@ -23,7 +24,6 @@ proctype disable(){
 
 /*Continuely switch the light of L[0]*/
 proctype L0(){
-	int i;/*Paramaters that will used to in global function*/
 	 check:
 	 if 
 	 ::to_L0?DISABLE -> goto wait;
@@ -38,7 +38,6 @@ proctype L0(){
 }
 /*Continuely switch the light of L[1]*/
 proctype L1(){
-	int i;/*Parameters that will be used in global function*/
 	check:
 	 if 
 	 ::to_L1?DISABLE -> goto wait;
@@ -53,7 +52,6 @@ proctype L1(){
 }
 /*Continuely swtich the light of T[0]*/
 proctype T0(){
-	int i;/*Parameters that will be used in global function*/
 	 check:
 	 if 
 	 ::to_T0?DISABLE -> goto wait;
@@ -68,7 +66,6 @@ proctype T0(){
 }
 /*Continuely swtich the light of T[1]*/
 proctype T1(){
-	int i;/*Parameters that will be used in global function*/
 	 check:
 	 if 
 	 ::to_T1?DISABLE -> goto wait;
@@ -83,7 +80,6 @@ proctype T1(){
 }
 
 proctype Monitor(){
-	int i;/*Temporal parameters*/
 	do
 	::resetLightSets()->checkLightStatus();	
 	od
@@ -95,6 +91,6 @@ init{
 	run L1();
 	run T1();
 	run T0();
-	/*run disable();*/
-	run Monitor();
+	/*run disable();*/ /*Assertion to verify first safety property*/
+	run Monitor(); /*Assertion to verify second safety property*/
 }
