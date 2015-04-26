@@ -27,7 +27,7 @@ proctype L0(){
 	 check:
 	 if 
 	 ::to_L0?DISABLE -> goto wait;
-	 ::empty(to_L0)-> goto process;
+	 ::to_L0?ENABLED-> goto process;
 	 fi
 	process:
 	 switchVehicleLightToRED(0);
@@ -41,7 +41,7 @@ proctype L1(){
 	check:
 	 if 
 	 ::to_L1?DISABLE -> goto wait;
-	 ::empty(to_L1)-> goto process;
+	 ::to_L1?ENABLED->-> goto process;
 	 fi
 	process:
 	 switchVehicleLightToRED(1);
@@ -55,7 +55,7 @@ proctype T0(){
 	 check:
 	 if 
 	 ::to_T0?DISABLE -> goto wait;
-	 ::empty(to_T0)-> goto process;
+	 ::to_T0?ENABLED-> goto process;
 	 fi
 	process:
 	 switchTurnLightToRED(0);
@@ -69,7 +69,7 @@ proctype T1(){
 	 check:
 	 if 
 	 ::to_T1?DISABLE -> goto wait;
-	 ::empty(to_T0)-> goto process;
+	 ::to_T1?ENABLED-> goto process;
 	 fi
 	process:
 	 switchTurnLightToRED(1);
@@ -91,6 +91,6 @@ init{
 	run L1();
 	run T1();
 	run T0();
-	/*run disable();*/ /*Assertion to verify first safety property*/
-	run Monitor(); /*Assertion to verify second safety property*/
+	run disable(); /*Assertion to verify first safety property*/
+	/*run Monitor();*/ /*Assertion to verify second safety property*/
 }
